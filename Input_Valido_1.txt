@@ -1,0 +1,9 @@
+segun "1" hacer {
+  caso "1":
+    imprimir("Elegiste opción 1");
+    salir;
+  caso "2": 
+    imprimir("Elegiste opción 2");
+    salir;
+}
+finsegun

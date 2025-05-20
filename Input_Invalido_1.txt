@@ -1,0 +1,10 @@
+segun "Matias" hacer {
+caso "Te olvidaste punto y coma":
+imprimir("Falta el punto y coma")
+salir;
+
+caso "Te olvidaste los dos puntos"
+imprimir("Te faltaron los dos puntos");
+salir;
+}
+finsegun

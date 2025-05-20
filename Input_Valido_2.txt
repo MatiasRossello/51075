@@ -1,0 +1,25 @@
+segun "Matias" hacer {
+  caso "Matias":
+    imprimir("Tu nombre es Matias");
+    salir;
+  caso "Alvaro": 
+    imprimir("Tu nombre es Alvaro");
+    salir;
+    
+  caso "Ignacio": 
+    imprimir("Tu nombre es Ignacio");
+    salir;
+
+  caso "Lucia": 
+    imprimir("Tu nombre es Lucia");
+    salir;
+    
+  caso "Alejandra": 
+    imprimir("Tu nombre es Alejandra");
+    salir;
+
+  caso "Romina": 
+    imprimir("Tu nombre es Romina");
+    salir;
+}
+finsegun

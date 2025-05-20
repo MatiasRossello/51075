@@ -1,0 +1,10 @@
+seguuun "Matias" hacer {
+caso "Saludar":
+imprimir("Hola me llamo Matias");
+salir;
+
+cazo "Despedirse":
+imprimir("Chau, Hasta la próxima");
+salir;
+}
+finsegun
