@@ -15,6 +15,11 @@ const COLORS = {
   cyan: "\x1b[36m",
 };
 
+// Intenta forzar el color en Windows por compatibilidad con cmd
+if (process.platform === "win32") {
+  process.env.FORCE_COLOR = "1";
+}
+
 function colorize(text, color) {
   return `${color}${text}${COLORS.reset}`;
 }
@@ -48,7 +53,8 @@ function mostrarTablaTokens(input) {
     const tokenType =
       MatiasLexer.symbolicNames[token.type] || `UNKNOWN (${token.type})`;
     const lexema = token.text;
-    console.log(`| ${lexema.padEnd(24)} | ${tokenType.padEnd(30)}|`);
+    const row = `| ${lexema.padEnd(24)} | ${tokenType.padEnd(30)}|`;
+    console.log(colorize(row, COLORS.green));
   }
   console.log(colorize("------------------------------------------------------------", COLORS.yellow));
   return true;
