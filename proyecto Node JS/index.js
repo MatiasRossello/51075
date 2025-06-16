@@ -7,6 +7,18 @@ import MatiasLexer from "./generated/MatiasLexer.js";
 import MatiasParser from "./generated/MatiasParser.js";
 import CustomMatiasVisitor from "./CustomMatiasVisitor.js";
 
+const COLORS = {
+  reset: "\x1b[0m",
+  red: "\x1b[31m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  cyan: "\x1b[36m",
+};
+
+function colorize(text, color) {
+  return `${color}${text}${COLORS.reset}`;
+}
+
 async function leerCadena() {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -24,21 +36,21 @@ function mostrarTablaTokens(input) {
   const lexer = new MatiasLexer(CharStreams.fromString(input));
   const tokens = lexer.getAllTokens();
   if (tokens.length === 0) {
-    console.error("No se generaron tokens.");
+    console.error(colorize("No se generaron tokens.", COLORS.red));
     return false;
   }
 
-  console.log("\nTabla de Tokens y Lexemas:");
-  console.log("------------------------------------------------------------");
-  console.log("| Lexema                   | Token                         |");
-  console.log("------------------------------------------------------------");
+  console.log(colorize("\nTabla de Tokens y Lexemas:", COLORS.cyan));
+  console.log(colorize("------------------------------------------------------------", COLORS.yellow));
+  console.log(colorize("| Lexema                   | Token                         |", COLORS.yellow));
+  console.log(colorize("------------------------------------------------------------", COLORS.yellow));
   for (let token of tokens) {
     const tokenType =
       MatiasLexer.symbolicNames[token.type] || `UNKNOWN (${token.type})`;
     const lexema = token.text;
     console.log(`| ${lexema.padEnd(24)} | ${tokenType.padEnd(30)}|`);
   }
-  console.log("------------------------------------------------------------");
+  console.log(colorize("------------------------------------------------------------", COLORS.yellow));
   return true;
 }
 
@@ -57,10 +69,10 @@ async function main() {
   let input;
   try {
     input = fs.readFileSync("input.txt", "utf8");
-    console.log("\nContenido del archivo input.txt:");
-    console.log("------------------------------------------------------------");
+    console.log(colorize("\nContenido del archivo input.txt:", COLORS.cyan));
+    console.log(colorize("------------------------------------------------------------", COLORS.yellow));
     console.log(input);
-    console.log("------------------------------------------------------------");
+    console.log(colorize("------------------------------------------------------------", COLORS.yellow));
   } catch {
     input = await leerCadena();
   }
@@ -89,38 +101,44 @@ async function main() {
   const tree = parser.prog();
 
   if (lexErrors.length > 0) {
-    console.error("\nError léxico detectado:");
+    console.error(colorize("\nError léxico detectado:", COLORS.red));
     for (const err of lexErrors) {
       console.error(
-        `Error léxico en línea ${err.line}:${err.column} - ${err.msg}`
+        colorize(
+          `Error léxico en línea ${err.line}:${err.column} - ${err.msg}`,
+          COLORS.red
+        )
       );
     }
     return;
   }
 
   if (syntaxErrors.length > 0) {
-    console.error("\nError sintáctico detectado:");
+    console.error(colorize("\nError sintáctico detectado:", COLORS.red));
     for (const err of syntaxErrors) {
       console.error(
-        `Error sintáctico en línea ${err.line}:${err.column} - ${err.msg}`
+        colorize(
+          `Error sintáctico en línea ${err.line}:${err.column} - ${err.msg}`,
+          COLORS.red
+        )
       );
     }
     return;
   }
 
-  console.log("\nEntrada válida.");
+  console.log(colorize("\nEntrada válida.", COLORS.green));
 
   mostrarTablaTokens(input);
 
-  console.log("\nÁrbol de análisis sintáctico:\n");
+  console.log(colorize("\nÁrbol de análisis sintáctico:\n", COLORS.cyan));
   console.log(archy(toArchy(tree, parser)));
 
   const visitor = new CustomMatiasVisitor();
 
-  console.log("\n--- Traducción a JavaScript ---");
+  console.log(colorize("\n--- Traducción a JavaScript ---", COLORS.cyan));
   const jsCode = visitor.translateToJS(tree);
-  console.log(jsCode);
-  console.log("--- Fin de Traducción ---");
+  console.log(colorize(jsCode, COLORS.green));
+  console.log(colorize("--- Fin de Traducción ---", COLORS.cyan));
 
   visitor.executeJS();
 }
